@@ -5,7 +5,7 @@
 
 #define Size 256
 #define SIGMA 10
-#define SNP_FREQ 128 
+#define SNP_FREQ 128
 
 #define max(a, b) (((a)>(b))?(a):(b))
 #define min(a, b) (((a)<(b))?(a):(b))
@@ -49,8 +49,14 @@ int paint_histogram(int width, int height, unsigned char* image, char* filename)
 	}
 
 	for(i=0; i<256; i++)
+	{
 		for(j=0; j<histo[i]; j++)
+		{
+			if(j>255)
+				break;
 			histoimg[i*width+j]=238;
+		}
+	}
 
 	write_pgm_image(filename, width, height, histoimg);
 	free(histoimg);
@@ -86,7 +92,7 @@ int add_gaussian_noise(int sigma, int width, int height, unsigned char* image)
 
 int add_snp_noise(int freq, int width, int height, unsigned char* image)
 {
-	int *noise = calloc(1, width*height);
+	int *noise = calloc(sizeof(int), width*height);
 	int i=0;
 	for(i=0; i<width*height; i++)
 		noise[i]=rand()%freq;
@@ -103,8 +109,8 @@ int add_snp_noise(int freq, int width, int height, unsigned char* image)
 }
 
 int comp (const void * elem1, const void * elem2) {
-    int f = *((int*)elem1);
-    int s = *((int*)elem2);
+    unsigned char f = *((unsigned char*)elem1);
+    unsigned char s = *((unsigned char*)elem2);
     if (f > s) return  1;
     if (f < s) return -1;
     return 0;
@@ -112,8 +118,9 @@ int comp (const void * elem1, const void * elem2) {
 
 int remove_snp_2d(int w_size, int width, int height, unsigned char* image, unsigned char* image_r)
 {
-	int *array = calloc(1, w_size*w_size);
+	unsigned char *array = calloc(1, w_size*w_size);
 	int count=0;
+	int z=0;
 	int x=0, y=0, x2=0, y2=0;
 	for(x=0; x<width; x++)
 	{
@@ -133,7 +140,7 @@ int remove_snp_2d(int w_size, int width, int height, unsigned char* image, unsig
 				}
 			}
 
-			qsort(array, sizeof(array), sizeof(*array), comp);
+			qsort(array, w_size*w_size, sizeof(*array), comp);
 			image_r[x*width+y]=array[w_size*w_size/2];
 		}
 	}
@@ -253,8 +260,12 @@ float psnr(int width, int height, unsigned char* _image, unsigned char* image)
 	float mse = 0;
 	int x=0, y=0;
 	for(x=0; x<width; x++)
+	{
 		for(y=0; y<height; y++)
+		{
 			mse+=pow(_image[x*width+y]-image[x*width+y], 2)/(width*height);
+		}
+	}
 
 	return 10*log10((255*255)/mse);
 }

@@ -14,7 +14,8 @@ CXXFLAGS= -w $(DBG_CXXFLAGS)
 
 CC=gcc
 DBG_CFLAGS= -D_DEBUG -g
-CFLAGS= -Wall #-w $(DBG_CXXFLAGS) 
+CFLAGS= -Wall  $(DBG_CXXFLAGS) 
+LIBS= -lm
 
 p1_SOURCES=dip_p1.c
 p2_SOURCES=dip_p2.c
@@ -26,11 +27,11 @@ all: help dip_p1 dip_p2
 
 dip_p1: $(p1_OBJS)
 	@echo "    LOG: compiling problem 1"
-	$(CC) $(CFLAGS) -o dip_p1 $(p1_OBJS)
+	$(CC) $(CFLAGS) -o dip_p1 $(p1_OBJS) $(LIBS)
 
 dip_p2: $(p2_OBJS)
 	@echo "    LOG: compiling problem 2"
-	$(CC) $(CFLAGS) -o dip_p2 $(p2_OBJS)
+	$(CC) $(CFLAGS) -o dip_p2 $(p2_OBJS) $(LIBS)
 
 help:
 	@echo "-------- USAGE INSTRUCTION --------"

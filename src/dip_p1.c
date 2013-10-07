@@ -117,8 +117,14 @@ int paint_histogram(int width, int height, unsigned char* image, char* filename)
 	}
 
 	for(i=0; i<256; i++)
+	{
 		for(j=0; j<histo[i]; j++)
+		{
+			if(j>255)
+				break;
 			histoimg[i*width+j]=238;
+		}
+	}
 
 	write_pgm_image(filename, width, height, histoimg);
 	free(histoimg);
@@ -402,15 +408,15 @@ int main(int argc, char** argv)
 	double pow = 30;
 	double gamma = 0.5;
 	power_law_transform(pow, gamma, Size, Size, imagePlaw);
-	paint_histogram(Size, Size, imagePlaw, "dip_hw1_p1_histogram_D_pow.pgm");
 	write_pgm_image("dip_hw1_p1_D_pow.pgm", Size, Size, imagePlaw);
+	paint_histogram(Size, Size, imagePlaw, "dip_hw1_p1_histogram_D_pow.pgm");
 
 	pow = 1;
 	gamma = 1.5;
 	memcpy(imagePlaw, imageD, sizeof(imageD));
 	power_law_transform(pow, gamma, Size, Size, imagePlaw);
-	paint_histogram(Size, Size, imagePlaw, "dip_hw1_p1_histogram_D_pow1.pgm");
 	write_pgm_image("dip_hw1_p1_D_pow1.pgm", Size, Size, imagePlaw);
+	paint_histogram(Size, Size, imagePlaw, "dip_hw1_p1_histogram_D_pow1.pgm");
 
 	unsigned char imageOtsu[Size*Size]={};
 	int thre = otsu_method(Size, Size, Imagedata);
