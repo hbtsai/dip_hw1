@@ -1,0 +1,55 @@
+
+# DIP Homework Assignment #1
+# 10 Jun. 2013
+#
+# Name: Hong-Bin Tsai
+# ID #: D98921017
+# email: hbtsai@gmail.com
+# compiled on xbuntu 13.04 with gcc 
+
+
+CXX=g++
+DBG_CXXFLAGS= -D_DEBUG -g
+CXXFLAGS= -w $(DBG_CXXFLAGS) 
+
+CC=gcc
+DBG_CFLAGS= -D_DEBUG -g
+CFLAGS= -Wall #-w $(DBG_CXXFLAGS) 
+
+p1_SOURCES=dip_p1.c
+p2_SOURCES=dip_p2.c
+
+p1_OBJS=$(p1_SOURCES:.c=.o)
+p2_OBJS=$(p2_SOURCES:.c=.o)
+
+all: help dip_p1 dip_p2
+
+dip_p1: $(p1_OBJS)
+	@echo "    LOG: compiling problem 1"
+	$(CC) $(CFLAGS) -o dip_p1 $(p1_OBJS)
+
+dip_p2: $(p2_OBJS)
+	@echo "    LOG: compiling problem 2"
+	$(CC) $(CFLAGS) -o dip_p2 $(p2_OBJS)
+
+help:
+	@echo "-------- USAGE INSTRUCTION --------"
+	@echo "run \`make -f README\` to compile to program. and "
+	@echo "run \`make -f README clean\` to remove intermediate files. and "
+	@echo "run \`make -f README help\` to show this help page. and "
+	@echo "run \`make -f README run\` to execute the program. "
+	@echo "all output files are saved in local directory."
+	@echo "-------- INSTRUCTION   END --------"
+
+run: 
+	@echo "    LOG: executing problem 1: ./dip_p1 sample1.raw"
+	./dip_p1 sample1.raw
+	@echo "    LOG: executing problem 2: ./dip_p2 sample2.raw"
+	./dip_p2 sample2.raw
+
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< 
+
+clean:
+	rm -fr dip_p1 dip_p2 *.o
+	rm -fr *.pgm
